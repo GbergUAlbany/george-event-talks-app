@@ -648,33 +648,74 @@ a:hover {
     --badge-border-color: var(--color-deprecated-border);
 }
 
-.card-actions-top {
-    display: flex;
-    gap: 8px;
-}
-
-.card-action-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    font-size: 15px;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
+/* Card Footer Action Buttons */
+.card-footer {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-color);
+}
+
+.card-btn {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     transition: all var(--transition-speed) ease;
 }
 
-.card-action-btn:hover {
+.card-btn:hover {
     color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
 }
 
-.card-action-btn.tweet-btn:hover {
+/* Copy text highlight (Prominent!) */
+.card-btn-secondary {
+    color: var(--color-feature);
+    background-color: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+.card-btn-secondary:hover {
+    color: #ffffff;
+    background-color: var(--color-feature);
+    border-color: var(--color-feature);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+}
+
+/* Tweet button secondary highlight */
+.card-btn-primary {
     color: var(--twitter-blue);
-    background-color: rgba(29, 155, 240, 0.1);
+    background-color: rgba(29, 155, 240, 0.06);
+    border-color: rgba(29, 155, 240, 0.15);
+}
+
+.card-btn-primary:hover {
+    color: #ffffff;
+    background-color: var(--twitter-blue);
+    border-color: var(--twitter-blue);
+    box-shadow: 0 4px 10px rgba(29, 155, 240, 0.2);
+}
+
+/* Link button tertiary styling */
+.card-btn-tertiary {
+    color: var(--text-muted);
+}
+
+.card-btn-tertiary:hover {
+    color: var(--text-primary);
 }
 
 /* HTML content within cards */

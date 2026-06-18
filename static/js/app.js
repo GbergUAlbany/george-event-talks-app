@@ -177,20 +177,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="badge-and-title">
                             <span class="badge"><i class="${iconClass}"></i> ${item.type}</span>
                         </div>
-                        <div class="card-actions-top">
-                            <button class="card-action-btn tweet-btn" title="Tweet about this update">
-                                <i class="fa-brands fa-x-twitter"></i>
-                            </button>
-                            <button class="card-action-btn copy-text-btn" title="Copy update text to clipboard">
-                                <i class="fa-regular fa-clipboard"></i>
-                            </button>
-                            <button class="card-action-btn copy-btn" title="Copy detail link">
-                                <i class="fa-solid fa-link"></i>
-                            </button>
-                        </div>
                     </div>
                     <div class="card-body">
                         ${item.html}
+                    </div>
+                    <div class="card-footer">
+                        <button class="card-btn card-btn-secondary copy-text-btn" title="Copy clean update text to clipboard">
+                            <i class="fa-regular fa-clipboard"></i> Copy Update
+                        </button>
+                        <button class="card-btn card-btn-primary tweet-btn" title="Tweet about this update">
+                            <i class="fa-brands fa-x-twitter"></i> Tweet
+                        </button>
+                        <button class="card-btn card-btn-tertiary copy-btn" title="Copy original release link">
+                            <i class="fa-solid fa-link"></i> Link
+                        </button>
                     </div>
                 `;
 
