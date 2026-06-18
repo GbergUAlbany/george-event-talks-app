@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('empty-state');
     const refreshBtn = document.getElementById('refresh-btn');
     const refreshIcon = document.getElementById('refresh-icon');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
     const searchInput = document.getElementById('search-input');
     const clearSearchBtn = document.getElementById('clear-search');
     const resetFiltersBtn = document.getElementById('reset-filters-btn');
@@ -180,8 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button class="card-action-btn tweet-btn" title="Tweet about this update">
                                 <i class="fa-brands fa-x-twitter"></i>
                             </button>
+                            <button class="card-action-btn copy-text-btn" title="Copy update text to clipboard">
+                                <i class="fa-regular fa-clipboard"></i>
+                            </button>
                             <button class="card-action-btn copy-btn" title="Copy detail link">
-                                <i class="fa-regular fa-copy"></i>
+                                <i class="fa-solid fa-link"></i>
                             </button>
                         </div>
                     </div>
@@ -203,6 +207,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.querySelector('.tweet-btn').addEventListener('click', (e) => {
                     e.stopPropagation();
                     selectRelease(item);
+                });
+
+                // Copy Text Button handler
+                card.querySelector('.copy-text-btn').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const textToCopy = `BigQuery [${item.type}] - ${item.date}:\n${item.text}`;
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showToast("Update text copied to clipboard!");
+                    }).catch(err => {
+                        console.error('Failed to copy text: ', err);
+                    });
                 });
 
                 // Copy Link Button handler
@@ -503,8 +518,59 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelTweetBtn.addEventListener('click', closeComposer);
     composerBackdrop.addEventListener('click', closeComposer);
 
+    // Export releases to CSV
+    function exportToCSV() {
+        if (filteredReleases.length === 0) {
+            showToast("No data to export", true);
+            return;
+        }
+
+        const headers = ["ID", "Date", "Type", "Description", "Link"];
+        
+        const escapeCSVValue = (val) => {
+            if (val === null || val === undefined) return '';
+            let stringVal = String(val).trim();
+            stringVal = stringVal.replace(/\r?\n|\r/g, ' ');
+            if (stringVal.includes('"') || stringVal.includes(',') || stringVal.includes(';')) {
+                stringVal = '"' + stringVal.replace(/"/g, '""') + '"';
+            }
+            return stringVal;
+        };
+
+        const csvRows = [headers.join(',')];
+
+        filteredReleases.forEach(item => {
+            const row = [
+                escapeCSVValue(item.id),
+                escapeCSVValue(item.date),
+                escapeCSVValue(item.type),
+                escapeCSVValue(item.text),
+                escapeCSVValue(item.feed_link)
+            ];
+            csvRows.push(row.join(','));
+        });
+
+        const csvContent = csvRows.join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        
+        const timestamp = new Date().toISOString().split('T')[0];
+        link.setAttribute("href", url);
+        link.setAttribute("download", `bigquery_release_notes_${timestamp}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showToast("CSV file downloaded successfully!");
+    }
+
     // Send tweet handler
     sendTweetBtn.addEventListener('click', submitTweet);
+
+    // Export CSV click handler
+    exportCsvBtn.addEventListener('click', exportToCSV);
 
     // Initialize - Fetch notes on startup
     fetchReleases();
